@@ -1,6 +1,5 @@
 export const revalidate = 60;
 
-
 import Link from "next/link";
 import Image from "next/image";
 import { client } from "@/lib/sanity";
@@ -43,70 +42,85 @@ export default async function BlogPage() {
           </p>
         </div>
 
-        {/* Blog Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {posts.map((post: any) => {
-            const excerpt =
-              post.body?.[0]?.children?.[0]?.text?.slice(0, 120) + "..." ||
-              "Read this article on ViralNest.";
+        {/* Blog Section */}
+        {posts.length === 0 ? (
+          <div className="text-center py-32">
+            <div className="inline-block px-6 py-3 rounded-full bg-purple-900/30 border border-purple-600 text-purple-300 text-sm">
+              Content Coming Soon
+            </div>
+            <h2 className="text-3xl font-bold mt-6">
+              No Blogs Yet 🚀
+            </h2>
+            <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+              We’re preparing valuable insights to help you grow faster.
+              Check back soon for fresh updates from ViralNest.
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {posts.map((post: any) => {
+              const excerpt =
+                post.body?.[0]?.children?.[0]?.text?.slice(0, 120) + "..." ||
+                "Read this article on ViralNest.";
 
-            return (
-              <Link
-                key={post._id}
-                href={`/blog/${post.slug.current}`}
-                className="group bg-[#111] rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500 transition duration-300 hover:-translate-y-2"
-              >
-                {/* Image */}
-                {post.mainImage?.asset?.url && (
-                  <div className="relative h-56 w-full overflow-hidden">
-                    <Image
-                      src={post.mainImage.asset.url}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition duration-500"
-                    />
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="p-6">
-
-                  {/* Categories */}
-                  {post.categories && (
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {post.categories.map((cat: string, i: number) => (
-                        <span
-                          key={i}
-                          className="text-xs px-2 py-1 bg-purple-900/40 border border-purple-600 rounded-full text-purple-300"
-                        >
-                          {cat}
-                        </span>
-                      ))}
+              return (
+                <Link
+                  key={post._id}
+                  href={`/blog/${post.slug.current}`}
+                  className="group bg-[#111] rounded-2xl overflow-hidden border border-purple-900/30 hover:border-purple-500 transition duration-300 hover:-translate-y-2"
+                >
+                  {/* Image */}
+                  {post.mainImage?.asset?.url && (
+                    <div className="relative h-56 w-full overflow-hidden">
+                      <Image
+                        src={post.mainImage.asset.url}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition duration-500"
+                      />
                     </div>
                   )}
 
-                  {/* Title */}
-                  <h2 className="text-xl font-semibold mb-3 group-hover:text-purple-400 transition">
-                    {post.title}
-                  </h2>
+                  {/* Content */}
+                  <div className="p-6">
 
-                  {/* Excerpt */}
-                  <p className="text-gray-400 text-sm mb-4">
-                    {excerpt}
-                  </p>
+                    {/* Categories */}
+                    {post.categories && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {post.categories.map((cat: string, i: number) => (
+                          <span
+                            key={i}
+                            className="text-xs px-2 py-1 bg-purple-900/40 border border-purple-600 rounded-full text-purple-300"
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
-                  {/* Date */}
-                  {post.publishedAt && (
-                    <p className="text-xs text-gray-500">
-                      {new Date(post.publishedAt).toLocaleDateString()}
+                    {/* Title */}
+                    <h2 className="text-xl font-semibold mb-3 group-hover:text-purple-400 transition">
+                      {post.title}
+                    </h2>
+
+                    {/* Excerpt */}
+                    <p className="text-gray-400 text-sm mb-4">
+                      {excerpt}
                     </p>
-                  )}
 
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                    {/* Date */}
+                    {post.publishedAt && (
+                      <p className="text-xs text-gray-500">
+                        {new Date(post.publishedAt).toLocaleDateString()}
+                      </p>
+                    )}
+
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
       </div>
     </div>
