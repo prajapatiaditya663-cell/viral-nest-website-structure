@@ -29,6 +29,11 @@ export default defineType({
       of: [{ type: "string" }],
     }),
     defineField({
+      name: "excerpt",
+      title: "Excerpt",
+      type: "text",
+    }),
+    defineField({
       name: "body",
       type: "array",
       of: [{ type: "block" }],
