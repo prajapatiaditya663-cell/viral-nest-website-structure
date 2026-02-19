@@ -1,9 +1,30 @@
 import { MetadataRoute } from 'next'
+import { client } from '@/lib/sanity'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 60 // revalidate every 60 seconds
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://viral-nest-website-structure.vercel.app'
 
+  // Fetch all blog slugs from Sanity
+  const posts = await client.fetch(`
+    *[_type == "post" && defined(slug.current)]{
+      "slug": slug.current,
+      publishedAt
+    }
+  `)
+
+  const blogUrls = posts.map((post: any) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.publishedAt
+      ? new Date(post.publishedAt)
+      : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
   return [
+    // MAIN PAGES
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -38,7 +59,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/locations`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/locations/dubai`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/locations/india`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/locations/europe`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/contact`,
@@ -46,5 +85,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+
+    // BLOG POSTS (Dynamic)
+    ...blogUrls,
   ]
 }

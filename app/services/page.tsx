@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Script from "next/script"
 import {
   ArrowRight,
   Share2,
@@ -11,15 +12,58 @@ import {
 } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Services | Viral Nest Media - Digital Marketing & Branding",
+  title:
+    "Digital Marketing Services in Dubai | Social Media, Branding & Web Development | Viral Nest Media",
   description:
-    "Explore our full range of digital marketing services including social media management, content creation, influencer marketing, branding & strategy, website development and YouTube management.",
+    "Discover our 360° digital marketing services including social media management, influencer marketing, branding strategy, website development and YouTube management. Helping brands grow across Dubai, India and Europe.",
+  keywords: [
+    "Digital Marketing Services Dubai",
+    "Social Media Management Dubai",
+    "Branding Agency Dubai",
+    "Influencer Marketing Agency",
+    "Website Development Dubai",
+    "YouTube Management Services",
+    "Performance Marketing Services",
+  ],
+  alternates: {
+    canonical: "https://www.viralnestmedia.com/services",
+  },
+  openGraph: {
+    title:
+      "Digital Marketing Services | Viral Nest Media",
+    description:
+      "Comprehensive digital marketing solutions including social media management, branding, influencer campaigns and website development.",
+    url: "https://www.viralnestmedia.com/services",
+    siteName: "Viral Nest Media",
+    images: [
+      {
+        url: "https://www.viralnestmedia.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Viral Nest Media Digital Marketing Services",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Digital Marketing Services | Viral Nest Media",
+    description:
+      "Explore our full suite of digital marketing services designed to scale modern brands.",
+    images: ["https://www.viralnestmedia.com/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 const services = [
   {
     icon: Share2,
     title: "Social Media Management",
+    slug: "social-media-management",
     description:
       "Complete content strategy, posting, engagement and analytics. We manage your social media presence from end to end, ensuring consistent brand messaging, audience growth and measurable results across all platforms.",
     features: [
@@ -32,6 +76,7 @@ const services = [
   {
     icon: Film,
     title: "Content Creation",
+    slug: "content-creation",
     description:
       "High-quality graphics, reels, video editing and brand creatives. Our creative team produces scroll-stopping content that captures attention and drives engagement across Instagram, TikTok and beyond.",
     features: [
@@ -44,6 +89,7 @@ const services = [
   {
     icon: Users,
     title: "Influencer Marketing",
+    slug: "influencer-marketing",
     description:
       "Influencer identification, outreach and campaign execution. We connect your brand with the right voices to amplify your message and reach new audiences authentically.",
     features: [
@@ -56,6 +102,7 @@ const services = [
   {
     icon: Lightbulb,
     title: "Branding & Strategy",
+    slug: "branding",
     description:
       "Brand positioning, audience strategy and growth planning. We define your brand identity and create a roadmap for sustainable growth that differentiates you in competitive markets.",
     features: [
@@ -68,6 +115,7 @@ const services = [
   {
     icon: Globe,
     title: "Website Development",
+    slug: "website-development",
     description:
       "SEO-optimized websites designed for business growth. We build fast, modern and conversion-focused websites that serve as the digital foundation for your brand.",
     features: [
@@ -80,6 +128,7 @@ const services = [
   {
     icon: Youtube,
     title: "YouTube Management",
+    slug: "youtube-management",
     description:
       "Channel setup, SEO optimization and content strategy. We help you build a YouTube presence that drives views, subscribers and long-term brand authority through video.",
     features: [
@@ -94,6 +143,38 @@ const services = [
 export default function ServicesPage() {
   return (
     <div className="pt-20">
+
+      {/* Structured Data */}
+      <Script
+        id="services-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            provider: {
+              "@type": "Organization",
+              name: "Viral Nest Media",
+              url: "https://www.viralnestmedia.com",
+            },
+            serviceType: "Digital Marketing Services",
+            areaServed: ["Dubai", "India", "Europe"],
+            hasOfferCatalog: {
+              "@type": "OfferCatalog",
+              name: "Digital Marketing Services",
+              itemListElement: services.map((service) => ({
+                "@type": "Offer",
+                itemOffered: {
+                  "@type": "Service",
+                  name: service.title,
+                  description: service.description,
+                },
+              })),
+            },
+          }),
+        }}
+      />
+
       {/* Hero */}
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
@@ -125,9 +206,12 @@ export default function ServicesPage() {
                   <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
                     <service.icon className="h-7 w-7 text-primary" />
                   </div>
-                  <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
-                    {service.title}
-                  </h2>
+                  <Link href={`/services/${service.slug}`}>
+                    <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl hover:text-primary transition-colors cursor-pointer">
+                      {service.title}
+                    </h2>
+                  </Link>
+
                   <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                     {service.description}
                   </p>

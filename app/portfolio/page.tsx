@@ -2,15 +2,55 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import Script from "next/script"
 
 export const metadata: Metadata = {
-  title: "Portfolio & Case Studies | Viral Nest Media",
+  title: "Portfolio & Case Studies | Digital Marketing Results | Viral Nest Media",
   description:
-    "See how Viral Nest Media has helped brands across Dubai, Europe and India achieve measurable growth through digital marketing and branding strategies.",
+    "Explore real digital marketing case studies by Viral Nest Media. See how we helped brands across Dubai, Europe, and India achieve measurable growth through social media marketing, branding, and performance campaigns.",
+  keywords: [
+    "Digital Marketing Case Studies",
+    "Social Media Marketing Results",
+    "Dubai Marketing Agency",
+    "Hospitality Marketing",
+    "Real Estate Lead Generation",
+    "Brand Growth Case Study",
+    "Viral Nest Media Portfolio",
+  ],
+  alternates: {
+    canonical: "https://www.viralnestmedia.com/portfolio",
+  },
+  openGraph: {
+    title: "Portfolio & Case Studies | Viral Nest Media",
+    description:
+      "Discover how Viral Nest Media delivers measurable growth through strategic digital marketing campaigns.",
+    url: "https://www.viralnestmedia.com/portfolio",
+    siteName: "Viral Nest Media",
+    images: [
+      {
+        url: "https://www.viralnestmedia.com/og-portfolio.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Viral Nest Media Case Studies",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Portfolio & Case Studies | Viral Nest Media",
+    description:
+      "Real digital marketing results across hospitality, real estate, fitness and luxury brands.",
+    images: ["https://www.viralnestmedia.com/og-portfolio.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 const clientLogos = [
-  // Previous logos
   "/images/accor.png",
   "/images/adama.png",
   "/images/baazar_logo.png",
@@ -30,8 +70,6 @@ const clientLogos = [
   "/images/landmark.png",
   "/images/lasolitaire.png",
   "/images/maruti-suzuki.png",
-
-  // New logos
   "/images/beer-biceps.jpg",
   "/images/meshki-logo.png",
   "/images/Ministry_of_External_Affairs_India.png",
@@ -117,6 +155,26 @@ const caseStudies = [
 export default function PortfolioPage() {
   return (
     <div className="pt-20">
+      
+      {/* Structured Data */}
+      <Script
+        id="portfolio-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Digital Marketing Case Studies",
+            itemListElement: caseStudies.map((study, index) => ({
+              "@type": "CreativeWork",
+              position: index + 1,
+              name: study.title,
+              description: study.challenge,
+            })),
+          }),
+        }}
+      />
+
       {/* Hero */}
       <section className="py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
@@ -132,8 +190,6 @@ export default function PortfolioPage() {
           </p>
         </div>
       </section>
-
-      
 
       {/* Case Studies */}
       <section className="pb-24">
@@ -152,11 +208,10 @@ export default function PortfolioPage() {
                     index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                   }`}
                 >
-                  {/* Image */}
                   <div className="relative aspect-[4/3] lg:aspect-auto lg:w-1/2">
                     <Image
-                      src={study.image || "/placeholder.svg"}
-                      alt={`Case study: ${study.industry}`}
+                      src={study.image}
+                      alt={`Digital marketing case study for ${study.industry}`}
                       fill
                       loading="lazy"
                       className="object-cover"
@@ -169,7 +224,6 @@ export default function PortfolioPage() {
                     </div>
                   </div>
 
-                  {/* Content */}
                   <div className="flex flex-1 flex-col justify-center p-8 md:p-12">
                     <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
                       {study.title}
@@ -215,32 +269,32 @@ export default function PortfolioPage() {
           </div>
         </div>
       </section>
-      {/* CLIENT LOGOS */}
-          <section className="pb-24">
-          <div className="mx-auto max-w-7xl px-6">
+
+      {/* Client Logos */}
+      <section className="pb-24">
+        <div className="mx-auto max-w-7xl px-6">
           <p className="mb-10 text-center text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-          Our Association with Brands
+            Our Association with Brands
           </p>
 
-
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 items-center">
-          {clientLogos.map((logo, index) => (
-          <div
-          key={index}
-          className="flex items-center justify-center rounded-2xl border border-white/10 bg-white p-4 shadow-sm transition hover:scale-105"
-          >
-          <Image
-          src={logo}
-          alt="Client logo"
-          width={160}
-          height={90}
-          className="object-contain grayscale hover:grayscale-0 transition"
-          />
+            {clientLogos.map((logo, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center rounded-2xl border border-white/10 bg-white p-4 shadow-sm transition hover:scale-105"
+              >
+                <Image
+                  src={logo}
+                  alt={`Client brand logo ${index + 1}`}
+                  width={160}
+                  height={90}
+                  className="object-contain grayscale hover:grayscale-0 transition"
+                />
+              </div>
+            ))}
           </div>
-          ))}
-          </div>
-          </div>
-</section>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="border-t border-primary/10 bg-card/30 py-24">
