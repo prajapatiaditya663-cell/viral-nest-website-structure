@@ -1,25 +1,24 @@
-import { MetadataRoute } from 'next'
-import { client } from '@/lib/sanity'
+import { MetadataRoute } from "next"
+import { client } from "@/lib/sanity"
 
-export const revalidate = 60 // revalidate every 60 seconds
+export const revalidate = 60 // Revalidate every 60 seconds
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://viral-nest-website-structure.vercel.app'
+  const baseUrl = "https://viral-nest-website-structure.vercel.app"
 
-  // Fetch all blog slugs from Sanity
+  // Fetch blog posts from Sanity
   const posts = await client.fetch(`
     *[_type == "post" && defined(slug.current)]{
       "slug": slug.current,
-      publishedAt
+      _updatedAt
     }
   `)
 
+  // Generate blog URLs dynamically
   const blogUrls = posts.map((post: any) => ({
     url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.publishedAt
-      ? new Date(post.publishedAt)
-      : new Date(),
-    changeFrequency: 'weekly' as const,
+    lastModified: new Date(post._updatedAt),
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }))
 
@@ -28,61 +27,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/services`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/portfolio`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/industries`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/locations`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/locations/dubai`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/locations/india`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/locations/europe`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
 
