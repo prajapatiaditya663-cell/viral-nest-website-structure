@@ -3,9 +3,16 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
-}
 
-export default nextConfig
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+      },
+    ],
+    formats: ["image/avif", "image/webp"],
+  },
+};
+
+export default nextConfig;

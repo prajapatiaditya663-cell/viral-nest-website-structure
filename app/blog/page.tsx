@@ -1,8 +1,49 @@
 export const revalidate = 60;
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { client } from "@/lib/sanity";
+
+/* =========================
+   SEO METADATA
+========================= */
+
+export const metadata: Metadata = {
+  title: "Blog | ViralNest",
+  description:
+    "Explore expert insights on digital marketing, SEO, branding, and growth strategies to scale your business with ViralNest.",
+  alternates: {
+    canonical: "https://yourdomain.com/blog", // 🔁 replace with real domain
+  },
+  openGraph: {
+    title: "ViralNest Blog",
+    description:
+      "Insights, strategies, and growth tactics to scale your digital presence.",
+    url: "https://yourdomain.com/blog", // 🔁 replace with real domain
+    siteName: "ViralNest",
+    images: [
+      {
+        url: "/og-image.png", // Make sure this exists in /public
+        width: 1200,
+        height: 630,
+        alt: "ViralNest Blog",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ViralNest Blog",
+    description:
+      "Digital marketing insights and strategies from ViralNest.",
+    images: ["/og-image.png"],
+  },
+};
+
+/* =========================
+   FETCH POSTS
+========================= */
 
 async function getPosts() {
   return await client.fetch(`
@@ -22,6 +63,10 @@ async function getPosts() {
     }
   `);
 }
+
+/* =========================
+   BLOG PAGE
+========================= */
 
 export default async function BlogPage() {
   const posts = await getPosts();
@@ -59,9 +104,11 @@ export default async function BlogPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {posts.map((post: any) => {
+
               const excerpt =
-                post.body?.[0]?.children?.[0]?.text?.slice(0, 120) + "..." ||
-                "Read this article on ViralNest.";
+                post.body?.[0]?.children?.[0]?.text
+                  ? post.body[0].children[0].text.slice(0, 140) + "..."
+                  : post.excerpt || "Read this article on ViralNest.";
 
               return (
                 <Link
@@ -76,7 +123,9 @@ export default async function BlogPage() {
                         src={post.mainImage.asset.url}
                         alt={post.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover group-hover:scale-110 transition duration-500"
+                        priority={false}
                       />
                     </div>
                   )}
@@ -111,7 +160,11 @@ export default async function BlogPage() {
                     {/* Date */}
                     {post.publishedAt && (
                       <p className="text-xs text-gray-500">
-                        {new Date(post.publishedAt).toLocaleDateString()}
+                        {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
                       </p>
                     )}
 
